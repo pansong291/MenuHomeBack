@@ -10,7 +10,7 @@ public class Zactivity extends Activity
 {
  public SharedPreferences sp;
  
- public final String V_CODE="v_code",QZGX="qzGX";
+ public static final String V_CODE="v_code",QZGX="qzGX",W_X="win_x",W_Y="win_y";
  
  @Override
  protected void onResume()

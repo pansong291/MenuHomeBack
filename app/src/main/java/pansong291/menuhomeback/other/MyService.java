@@ -20,6 +20,8 @@ import android.widget.Toast;
 import pansong291.menuhomeback.R;
 import pansong291.menuhomeback.ui.MainActivity;
 import android.graphics.Point;
+import android.content.SharedPreferences;
+import pansong291.menuhomeback.ui.Zactivity;
 
 public class MyService extends Service 
 {
@@ -32,6 +34,10 @@ public class MyService extends Service
 
  View viewLayoutBtn;
  Button btn_main,btn_menu,btn_home,btn_back;
+ 
+ SharedPreferences sp;
+ 
+ int screenW,screenH;
 
  private static final String TAG="MyService";
 
@@ -41,6 +47,7 @@ public class MyService extends Service
   // TODO Auto-generated method stub
   super.onCreate();
   Log.i(TAG,"oncreat");
+  sp=getSharedPreferences(getPackageName()+"_preferences",0);
   createFloatView();      
  }
 
@@ -57,6 +64,8 @@ public class MyService extends Service
   //获取的是WindowManagerImpl.CompatModeWrapper
   mWindowManager=(WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
   Log.i(TAG,"mWindowManager--->"+mWindowManager);
+  screenW=mWindowManager.getDefaultDisplay().getWidth();
+  screenH=mWindowManager.getDefaultDisplay().getHeight();
   //设置window type
   wmParams.type=LayoutParams.TYPE_PHONE; 
   //设置图片格式，效果为背景透明
@@ -65,9 +74,9 @@ public class MyService extends Service
   wmParams.flags=LayoutParams.FLAG_NOT_FOCUSABLE;      
   //调整悬浮窗显示的停靠位置为左侧置顶
   wmParams.gravity=Gravity.LEFT|Gravity.TOP;       
-  // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
-  wmParams.x=0;
-  wmParams.y=0;
+  //以屏幕左上角为原点，设置x、y初始值，相对于gravity
+  wmParams.x=sp.getInt(Zactivity.W_X,0);
+  wmParams.y=sp.getInt(Zactivity.W_Y,0);
 
   //设置悬浮窗口长宽数据  
   wmParams.width=LayoutParams.WRAP_CONTENT;
@@ -93,23 +102,31 @@ public class MyService extends Service
   //设置监听浮动窗口的触摸移动
   btn_main.setOnTouchListener(new OnTouchListener() 
    {
-    Point po=new Point();
+    Point pBefore=new Point(),pAfter=new Point();
     @Override
     public boolean onTouch(View v,MotionEvent event) 
     {
      switch(event.getAction())
      {
       case MotionEvent.ACTION_DOWN:
-       po.set((int)event.getRawX(),(int)event.getRawY());
+       pBefore.set((int)event.getRawX(),(int)event.getRawY());
       break;
       case MotionEvent.ACTION_MOVE:
+       pAfter.set((int)event.getRawX(),(int)event.getRawY());
+       if(viewLayoutBtn.getVisibility()==0&&pBefore.y>=screenH-mFloatLayout.getMeasuredHeight())
+        wmParams.y=screenH-mFloatLayout.getMeasuredHeight();
        //getRawX是触摸位置相对于屏幕的坐标
-       wmParams.x+=(int)event.getRawX()-po.x;
+       wmParams.x+=pAfter.x-pBefore.x;
+       if(wmParams.x<0||wmParams.x>screenW-btn_main.getMeasuredWidth())
+        wmParams.x-=pAfter.x-pBefore.x;
        //y减去状态栏的高度
-       wmParams.y+=(int)event.getRawY()-po.y;
+       wmParams.y+=pAfter.y-pBefore.y;
+       if((viewLayoutBtn.getVisibility()==0&&wmParams.y>=screenH-mFloatLayout.getMeasuredHeight())||
+       (wmParams.y<0||wmParams.y>screenH-btn_main.getMeasuredHeight()))
+        wmParams.y-=pAfter.y-pBefore.y;
        //刷新
        mWindowManager.updateViewLayout(mFloatLayout,wmParams);
-       po.set((int)event.getRawX(),(int)event.getRawY());
+       pBefore.set(pAfter.x,pAfter.y);
       break;
       case MotionEvent.ACTION_UP:
       break;
@@ -131,6 +148,8 @@ public class MyService extends Service
  {
   // TODO Auto-generated method stub
   super.onDestroy();
+  sp.edit().putInt(Zactivity.W_X,wmParams.x).commit();
+  sp.edit().putInt(Zactivity.W_Y,wmParams.y).commit();
   if(mFloatLayout!=null)
   {
    //移除悬浮窗口
