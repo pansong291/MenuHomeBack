@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MenuHomeBack</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="hello_user"></string>
+    <string name="update_msg"></string>
+    
+    <color name="color_alpha">#00000000</color>
+    <color name="color_btn_down">#9934b6e4</color>
+</resources>

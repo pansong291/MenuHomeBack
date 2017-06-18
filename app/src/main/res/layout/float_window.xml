@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:gravity="center_horizontal">
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:text="MHB"
+		android:id="@+id/float_btn_main"
+		style="?android:attr/buttonStyleSmall"/>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:orientation="vertical"
+		android:id="@+id/float_layout_btn"
+		android:gravity="center_horizontal">
+
+		<Button
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:text="MENU"
+			android:id="@+id/float_btn_menu"/>
+
+		<Button
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:text="HOME"
+			android:id="@+id/float_btn_home"/>
+
+		<Button
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:text="BACK"
+			android:id="@+id/float_btn_back"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
