@@ -37,7 +37,7 @@ public class MyService extends Service
  
  SharedPreferences sp;
  
- int screenW,screenH;
+ int screenW,screenH,statusH;
 
  private static final String TAG="MyService";
 
@@ -60,6 +60,7 @@ public class MyService extends Service
 
  private void createFloatView()
  {
+  statusH=(int)getStatusHeight(this);
   wmParams=new LayoutParams();
   //获取的是WindowManagerImpl.CompatModeWrapper
   mWindowManager=(WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
@@ -113,16 +114,16 @@ public class MyService extends Service
       break;
       case MotionEvent.ACTION_MOVE:
        pAfter.set((int)event.getRawX(),(int)event.getRawY());
-       if(viewLayoutBtn.getVisibility()==0&&pBefore.y>=screenH-mFloatLayout.getMeasuredHeight())
-        wmParams.y=screenH-mFloatLayout.getMeasuredHeight();
+       if(viewLayoutBtn.getVisibility()==0&&pBefore.y>screenH-mFloatLayout.getMeasuredHeight())
+        wmParams.y=screenH-statusH-mFloatLayout.getMeasuredHeight();
        //getRawX是触摸位置相对于屏幕的坐标
        wmParams.x+=pAfter.x-pBefore.x;
        if(wmParams.x<0||wmParams.x>screenW-btn_main.getMeasuredWidth())
         wmParams.x-=pAfter.x-pBefore.x;
        //y减去状态栏的高度
        wmParams.y+=pAfter.y-pBefore.y;
-       if((viewLayoutBtn.getVisibility()==0&&wmParams.y>=screenH-mFloatLayout.getMeasuredHeight())||
-       (wmParams.y<0||wmParams.y>screenH-btn_main.getMeasuredHeight()))
+       if((viewLayoutBtn.getVisibility()==0&&wmParams.y>=screenH-statusH-mFloatLayout.getMeasuredHeight())||
+       (wmParams.y<0||wmParams.y>screenH-statusH-btn_main.getMeasuredHeight()))
         wmParams.y-=pAfter.y-pBefore.y;
        //刷新
        mWindowManager.updateViewLayout(mFloatLayout,wmParams);
@@ -141,6 +142,22 @@ public class MyService extends Service
   btn_home.setOnClickListener(mbcl);
   btn_back.setOnClickListener(mbcl);
   
+ }
+ 
+ //获取状态栏高度
+ public float getStatusHeight(Service a1)
+ {
+  int i1=0;
+  try{
+   Class<?>c1=Class.forName("com.android.internal.R$dimen");
+   Object o1=c1.newInstance();
+   int i2=Integer.parseInt(c1.getField("status_bar_height").get(o1).toString());
+   i1=a1.getResources().getDimensionPixelSize(i2);
+  }catch(Exception e)
+  {
+   e.printStackTrace();
+  }
+  return i1;
  }
 
  @Override
