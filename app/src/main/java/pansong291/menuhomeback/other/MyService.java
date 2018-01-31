@@ -103,7 +103,7 @@ public class MyService extends Service
   //设置监听浮动窗口的触摸移动
   btn_main.setOnTouchListener(new OnTouchListener() 
    {
-    Point pBefore=new Point(),pAfter=new Point();
+    Point pBefore=new Point(),pAfter=new Point(),pFirst=new Point();
     @Override
     public boolean onTouch(View v,MotionEvent event) 
     {
@@ -111,6 +111,7 @@ public class MyService extends Service
      {
       case MotionEvent.ACTION_DOWN:
        pBefore.set((int)event.getRawX(),(int)event.getRawY());
+       pFirst.set(pBefore.x,pBefore.y);
       break;
       case MotionEvent.ACTION_MOVE:
        pAfter.set((int)event.getRawX(),(int)event.getRawY());
@@ -130,14 +131,20 @@ public class MyService extends Service
        pBefore.set(pAfter.x,pAfter.y);
       break;
       case MotionEvent.ACTION_UP:
+       //移动距离小于某值，则为点击事件或长按事件
+       if(Math.abs(event.getRawX()-pFirst.x)<5&&Math.abs(event.getRawY()-pFirst.y)<5)
+       {
+        //如果时间间隔小于某值，则为点击事件
+        viewLayoutBtn.setVisibility(8-viewLayoutBtn.getVisibility());
+       }
       break;
      }
      return false;//此处必须返回false，否则OnClickListener获取不到监听
     }
    }); 
   
-  MyBtnClickListener mbcl=new MyBtnClickListener(viewLayoutBtn);
-  btn_main.setOnClickListener(mbcl);
+  MyBtnClickListener mbcl=new MyBtnClickListener();//viewLayoutBtn);
+  //btn_main.setOnClickListener(mbcl);
   btn_menu.setOnClickListener(mbcl);
   btn_home.setOnClickListener(mbcl);
   btn_back.setOnClickListener(mbcl);
