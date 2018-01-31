@@ -2,26 +2,27 @@ package pansong291.menuhomeback.other;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
-import android.os.Handler;
+import android.graphics.Point;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.WindowManager;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import pansong291.menuhomeback.R;
-import pansong291.menuhomeback.ui.MainActivity;
-import android.graphics.Point;
-import android.content.SharedPreferences;
 import pansong291.menuhomeback.ui.Zactivity;
+import android.os.Handler;
+import pansong291.menuhomeback.ui.MainActivity;
 
 public class MyService extends Service 
 {
@@ -100,10 +101,14 @@ public class MyService extends Service
   btn_back=(Button)mFloatLayout.findViewById(R.id.float_btn_back);
 
   mFloatLayout.measure(MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
+  viewLayoutBtn.setVisibility(sp.getInt(Zactivity.VISI,0));
   //设置监听浮动窗口的触摸移动
   btn_main.setOnTouchListener(new OnTouchListener() 
    {
     Point pBefore=new Point(),pAfter=new Point(),pFirst=new Point();
+    Handler longPressHandler=new Handler();
+    boolean longPressed=false;
+    
     @Override
     public boolean onTouch(View v,MotionEvent event) 
     {
@@ -112,6 +117,21 @@ public class MyService extends Service
       case MotionEvent.ACTION_DOWN:
        pBefore.set((int)event.getRawX(),(int)event.getRawY());
        pFirst.set(pBefore.x,pBefore.y);
+       longPressed=false;
+       longPressHandler.postDelayed(new Runnable()
+       {
+         @Override
+         public void run()
+         {
+          //长按事件
+          longPressed=true;
+          Vibrator vibrator=(Vibrator)MyService.this.getSystemService(MyService.this.VIBRATOR_SERVICE);
+          vibrator.vibrate(50);
+          Intent it=new Intent(MyService.this,MainActivity.class);
+          it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          startActivity(it);
+         }
+        },1000);
       break;
       case MotionEvent.ACTION_MOVE:
        pAfter.set((int)event.getRawX(),(int)event.getRawY());
@@ -129,21 +149,30 @@ public class MyService extends Service
        //刷新
        mWindowManager.updateViewLayout(mFloatLayout,wmParams);
        pBefore.set(pAfter.x,pAfter.y);
+       
+       if(Math.abs(event.getRawX()-pFirst.x)>=10&&Math.abs(event.getRawY()-pFirst.y)>=10)
+       {
+        longPressHandler.removeCallbacksAndMessages(null);
+       }
       break;
       case MotionEvent.ACTION_UP:
+       longPressHandler.removeCallbacksAndMessages(null);
        //移动距离小于某值，则为点击事件或长按事件
-       if(Math.abs(event.getRawX()-pFirst.x)<5&&Math.abs(event.getRawY()-pFirst.y)<5)
+       if(Math.abs(event.getRawX()-pFirst.x)<10&&Math.abs(event.getRawY()-pFirst.y)<10)
        {
-        //如果时间间隔小于某值，则为点击事件
-        viewLayoutBtn.setVisibility(8-viewLayoutBtn.getVisibility());
+        //如果时间间隔小于某值(或长按未触发)，则为点击事件
+        if(!longPressed)
+        {
+         viewLayoutBtn.setVisibility(8-viewLayoutBtn.getVisibility());
+        }
        }
       break;
      }
-     return false;//此处必须返回false，否则OnClickListener获取不到监听
+     return true;//返回真使得主按钮获取不到其它监听
     }
    }); 
   
-  MyBtnClickListener mbcl=new MyBtnClickListener();//viewLayoutBtn);
+  MyBtnClickListener mbcl=new MyBtnClickListener(viewLayoutBtn);
   //btn_main.setOnClickListener(mbcl);
   btn_menu.setOnClickListener(mbcl);
   btn_home.setOnClickListener(mbcl);
@@ -174,6 +203,7 @@ public class MyService extends Service
   super.onDestroy();
   sp.edit().putInt(Zactivity.W_X,wmParams.x).commit();
   sp.edit().putInt(Zactivity.W_Y,wmParams.y).commit();
+  sp.edit().putInt(Zactivity.VISI,viewLayoutBtn.getVisibility()).commit();
   if(mFloatLayout!=null)
   {
    //移除悬浮窗口

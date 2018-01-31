@@ -47,6 +47,7 @@ public class RootShellCmd
    if(os!=null)
    {
     os.close();
+    os=null;
    }
   }catch(Exception e){}
  }

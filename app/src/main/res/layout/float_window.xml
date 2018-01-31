@@ -8,10 +8,11 @@
 
 	<Button
 		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:text="MHB"
 		android:id="@+id/float_btn_main"
-		style="?android:attr/buttonStyleSmall"/>
+		style="?android:attr/buttonStyleSmall"
+		android:ems="4"/>
 
 	<LinearLayout
 		android:layout_height="wrap_content"

@@ -9,17 +9,23 @@ import android.view.View;
 import pansong291.menuhomeback.R;
 import pansong291.menuhomeback.other.MyService;
 import pansong291.menuhomeback.other.RootShellCmd;
+import pansong291.menuhomeback.other.MyBtnClickListener;
+import android.widget.CheckBox;
 
 public class MainActivity extends Zactivity 
 {
  int VERSION_CODE;
  String VERSION_NAME;
+ CheckBox cbShowToast,cbAutoHide;
  
  @Override
  protected void onCreate(Bundle savedInstanceState)
  {
   super.onCreate(savedInstanceState);
   setContentView(R.layout.activity_main);
+  
+  cbShowToast=(CheckBox)findViewById(R.id.cb_main_show_toast);
+  cbAutoHide=(CheckBox)findViewById(R.id.cb_main_auto_hide);
   
   try{
    PackageInfo pi=getPackageManager().getPackageInfo(getPackageName(),0);
@@ -39,7 +45,7 @@ public class MainActivity extends Zactivity
     .show();
   }
   
-  int oldVerCode=sp.getInt(V_CODE,99999999);
+  int oldVerCode=opInt(V_CODE,99999999);
   if(oldVerCode<VERSION_CODE)
   {
    //用户更新了本应用
@@ -48,7 +54,7 @@ public class MainActivity extends Zactivity
     .setMessage(String.format("感谢您对本应用的支持！\n本应用已成功升级到%1$s版本。\n%2$s",VERSION_NAME,getString(R.string.update_msg)))
     .setPositiveButton("确定",null)
     .show();
-   sp.edit().putInt(V_CODE,VERSION_CODE).commit();
+   ipInt(V_CODE,VERSION_CODE);
   }else if(oldVerCode==99999999)
   {
    //用户第一次安装本应用
@@ -57,12 +63,30 @@ public class MainActivity extends Zactivity
     .setMessage(String.format("感谢您安装本应用！\n%s",getString(R.string.hello_user)))
     .setPositiveButton("确定",null)
     .show();
-   sp.edit().putInt(V_CODE,VERSION_CODE).commit();
+   ipInt(V_CODE,VERSION_CODE);
   }
-  
+
+  MyBtnClickListener.showToast=opBoolean(S_T,true);
+  cbShowToast.setChecked(MyBtnClickListener.showToast);
+  MyBtnClickListener.autoHide=opBoolean(A_H,true);
+  cbAutoHide.setChecked(MyBtnClickListener.autoHide);
   
  }
- 
+
+ @Override
+ protected void onResume()
+ {
+  super.onResume();
+ }
+
+ @Override
+ protected void onStop()
+ {
+  super.onStop();
+  ipBoolean(S_T,MyBtnClickListener.showToast);
+  ipBoolean(A_H,MyBtnClickListener.autoHide);
+ }
+
  public void onStartClick(View v)
  {
   startService(new Intent(MainActivity.this,MyService.class));
@@ -71,6 +95,19 @@ public class MainActivity extends Zactivity
  public void onStopClick(View v)
  {
   stopService(new Intent(MainActivity.this,MyService.class));
+ }
+ 
+ public void onCheckBoxClick(View v)
+ {
+  switch(v.getId())
+  {
+   case R.id.cb_main_show_toast:
+    MyBtnClickListener.showToast=!MyBtnClickListener.showToast;
+   break;
+   case R.id.cb_main_auto_hide:
+    MyBtnClickListener.autoHide=!MyBtnClickListener.autoHide;
+   break;
+  }
  }
  
  //获取状态栏高度

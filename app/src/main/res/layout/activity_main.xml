@@ -3,23 +3,65 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:gravity="center">
+	android:gravity="center"
+	android:orientation="vertical">
 
-	<Button
-		android:text="启动"
-		android:layout_width="wrap_content"
+	<LinearLayout
 		android:layout_height="wrap_content"
-        android:onClick="onStartClick"
+		android:layout_width="wrap_content"
+		android:orientation="horizontal">
+
+		<Button
+			android:text="启动"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="onStartClick"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#000000"/>
+
+		<Button
+			android:text="关闭"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="onStopClick"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#000000"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:orientation="vertical">
+
+		<CheckBox
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:id="@+id/cb_main_show_toast"
+			android:text="开启按键提示"
+			android:onClick="onCheckBoxClick"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#000000"/>
+
+		<CheckBox
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:id="@+id/cb_main_auto_hide"
+			android:text="点击按钮后隐藏子菜单"
+			android:onClick="onCheckBoxClick"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#000000"/>
+
+	</LinearLayout>
+
+	<TextView
+		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="wrap_content"
+		android:text="@string/txt_main_info"
+		android:layout_marginLeft="50dp"
+		android:layout_marginRight="50dp"
 		android:textColor="#000000"/>
 
-    <Button
-        android:text="关闭"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onStopClick"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000"/>
-    
 </LinearLayout>
 

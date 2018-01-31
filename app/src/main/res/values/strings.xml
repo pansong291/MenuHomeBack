@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="hello_user"></string>
     <string name="update_msg"></string>
+    <string name="txt_main_info">说明：如需长时间使用此功能，请将本应用添加至后台<B>白名单</B>，包括第三方软件的白名单，特别是<I>MIUI</I>等严格控制后台进程的系统，否则本应用在后台放置一定时间后会被杀掉。</string>
     
     <color name="color_alpha">#00000000</color>
     <color name="color_btn_down">#9934b6e4</color>
