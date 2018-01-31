@@ -89,12 +89,12 @@ public class MainActivity extends Zactivity
 
  public void onStartClick(View v)
  {
-  startService(new Intent(MainActivity.this,MyService.class));
+  startService(new Intent(this,MyService.class));
  }
  
  public void onStopClick(View v)
  {
-  stopService(new Intent(MainActivity.this,MyService.class));
+  stopService(new Intent(this,MyService.class));
  }
  
  public void onCheckBoxClick(View v)

@@ -150,9 +150,10 @@ public class MyService extends Service
        mWindowManager.updateViewLayout(mFloatLayout,wmParams);
        pBefore.set(pAfter.x,pAfter.y);
        
-       if(Math.abs(event.getRawX()-pFirst.x)>=10&&Math.abs(event.getRawY()-pFirst.y)>=10)
+       if(!longPressed&&Math.abs(event.getRawX()-pFirst.x)>9&&Math.abs(event.getRawY()-pFirst.y)>9)
        {
         longPressHandler.removeCallbacksAndMessages(null);
+        longPressed=true;
        }
       break;
       case MotionEvent.ACTION_UP:
