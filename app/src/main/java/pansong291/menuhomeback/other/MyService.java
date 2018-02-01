@@ -125,8 +125,9 @@ public class MyService extends Service
          {
           //长按事件
           longPressed=true;
-          Vibrator vibrator=(Vibrator)MyService.this.getSystemService(MyService.this.VIBRATOR_SERVICE);
-          vibrator.vibrate(50);
+//          Vibrator vibrator=(Vibrator)MyService.this.getSystemService(MyService.this.VIBRATOR_SERVICE);
+//          vibrator.vibrate(new long[]{0,1,20,21},-1);
+          MyBtnClickListener.vibrate(MyService.this,MyBtnClickListener.VIBRATE_LOW);
           Intent it=new Intent(MyService.this,MainActivity.class);
           it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           startActivity(it);

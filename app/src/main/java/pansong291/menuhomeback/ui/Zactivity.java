@@ -13,7 +13,8 @@ public class Zactivity extends Activity
  public static final String
   V_CODE="v_code",QZGX="qzGX",
   W_X="win_x",W_Y="win_y",VISI="visible",
-  S_T="show_t",A_H="auto_h";
+  S_T="show_t",A_H="auto_h",
+  V_F="vibrate_f",V_S="vibrate_s";
  
  @Override
  protected void onResume()

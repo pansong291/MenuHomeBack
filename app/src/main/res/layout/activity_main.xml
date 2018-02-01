@@ -52,6 +52,56 @@
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:textColor="#000000"/>
 
+		<CheckBox
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:id="@+id/cb_main_vibrate_feedback"
+			android:text="震动反馈"
+			android:onClick="onCheckBoxClick"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#000000"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_width="match_parent"
+			android:text="震动强度："
+			android:textColor="#646464"/>
+
+		<RadioGroup
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:orientation="horizontal">
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textColor="#000000"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:text="较弱"
+                android:onClick="onRadioBtnClick"
+				android:id="@+id/rb_main_vibrate_low"/>
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textColor="#000000"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:text="适中"
+                android:onClick="onRadioBtnClick"
+				android:id="@+id/rb_main_vibrate_middle"/>
+
+			<RadioButton
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textColor="#000000"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:text="较强"
+                android:onClick="onRadioBtnClick"
+				android:id="@+id/rb_main_vibrate_high"/>
+
+		</RadioGroup>
+
 	</LinearLayout>
 
 	<TextView

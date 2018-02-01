@@ -11,12 +11,14 @@ import pansong291.menuhomeback.other.MyService;
 import pansong291.menuhomeback.other.RootShellCmd;
 import pansong291.menuhomeback.other.MyBtnClickListener;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 
 public class MainActivity extends Zactivity 
 {
  int VERSION_CODE;
  String VERSION_NAME;
- CheckBox cbShowToast,cbAutoHide;
+ CheckBox cbShowToast,cbAutoHide,cbVibrate;
+ RadioButton rbVibrateLow,rbVibrateMiddle,rbVibrateHigh;
  
  @Override
  protected void onCreate(Bundle savedInstanceState)
@@ -26,6 +28,10 @@ public class MainActivity extends Zactivity
   
   cbShowToast=(CheckBox)findViewById(R.id.cb_main_show_toast);
   cbAutoHide=(CheckBox)findViewById(R.id.cb_main_auto_hide);
+  cbVibrate=(CheckBox)findViewById(R.id.cb_main_vibrate_feedback);
+  rbVibrateLow=(RadioButton)findViewById(R.id.rb_main_vibrate_low);
+  rbVibrateMiddle=(RadioButton)findViewById(R.id.rb_main_vibrate_middle);
+  rbVibrateHigh=(RadioButton)findViewById(R.id.rb_main_vibrate_high);
   
   try{
    PackageInfo pi=getPackageManager().getPackageInfo(getPackageName(),0);
@@ -70,6 +76,21 @@ public class MainActivity extends Zactivity
   cbShowToast.setChecked(MyBtnClickListener.showToast);
   MyBtnClickListener.autoHide=opBoolean(A_H,true);
   cbAutoHide.setChecked(MyBtnClickListener.autoHide);
+  MyBtnClickListener.vibrateFeedback=opBoolean(V_F,true);
+  cbVibrate.setChecked(MyBtnClickListener.vibrateFeedback);
+  MyBtnClickListener.vibrateStrong=opInt(V_S,MyBtnClickListener.VIBRATE_LOW);
+  switch(MyBtnClickListener.vibrateStrong)
+  {
+   case MyBtnClickListener.VIBRATE_LOW:
+    rbVibrateLow.setChecked(true);
+   break;
+   case MyBtnClickListener.VIBRATE_MIDDLE:
+    rbVibrateMiddle.setChecked(true);
+   break;
+   case MyBtnClickListener.VIBRATE_HIGH:
+    rbVibrateHigh.setChecked(true);
+   break;
+  }
   
  }
 
@@ -85,6 +106,8 @@ public class MainActivity extends Zactivity
   super.onStop();
   ipBoolean(S_T,MyBtnClickListener.showToast);
   ipBoolean(A_H,MyBtnClickListener.autoHide);
+  ipBoolean(V_F,MyBtnClickListener.vibrateFeedback);
+  ipInt(V_S,MyBtnClickListener.vibrateStrong);
  }
 
  public void onStartClick(View v)
@@ -106,6 +129,25 @@ public class MainActivity extends Zactivity
    break;
    case R.id.cb_main_auto_hide:
     MyBtnClickListener.autoHide=!MyBtnClickListener.autoHide;
+   break;
+   case R.id.cb_main_vibrate_feedback:
+    MyBtnClickListener.vibrateFeedback=!MyBtnClickListener.vibrateFeedback;
+   break;
+  }
+ }
+ 
+ public void onRadioBtnClick(View v)
+ {
+  switch(v.getId())
+  {
+   case R.id.rb_main_vibrate_low:
+    MyBtnClickListener.vibrateStrong=MyBtnClickListener.VIBRATE_LOW;
+   break;
+   case R.id.rb_main_vibrate_middle:
+    MyBtnClickListener.vibrateStrong=MyBtnClickListener.VIBRATE_MIDDLE;
+   break;
+   case R.id.rb_main_vibrate_high:
+    MyBtnClickListener.vibrateStrong=MyBtnClickListener.VIBRATE_HIGH;
    break;
   }
  }
