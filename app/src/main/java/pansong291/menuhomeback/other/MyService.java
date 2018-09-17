@@ -136,7 +136,7 @@ public class MyService extends Service
       break;
       case MotionEvent.ACTION_MOVE:
        pAfter.set((int)event.getRawX(),(int)event.getRawY());
-       if(viewLayoutBtn.getVisibility()==0&&pBefore.y>screenH-mFloatLayout.getMeasuredHeight())
+       if(viewLayoutBtn.getVisibility()==0&&wmParams.y>screenH-statusH-mFloatLayout.getMeasuredHeight())
         wmParams.y=screenH-statusH-mFloatLayout.getMeasuredHeight();
        //getRawX是触摸位置相对于屏幕的坐标
        wmParams.x+=pAfter.x-pBefore.x;
@@ -144,8 +144,8 @@ public class MyService extends Service
         wmParams.x-=pAfter.x-pBefore.x;
        //y减去状态栏的高度
        wmParams.y+=pAfter.y-pBefore.y;
-       if((viewLayoutBtn.getVisibility()==0&&wmParams.y>=screenH-statusH-mFloatLayout.getMeasuredHeight())||
-       (wmParams.y<0||wmParams.y>screenH-statusH-btn_main.getMeasuredHeight()))
+       if((viewLayoutBtn.getVisibility()==0&&wmParams.y>screenH-statusH-mFloatLayout.getMeasuredHeight())||
+       wmParams.y<0||wmParams.y>screenH-statusH-btn_main.getMeasuredHeight())
         wmParams.y-=pAfter.y-pBefore.y;
        //刷新
        mWindowManager.updateViewLayout(mFloatLayout,wmParams);
